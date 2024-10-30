@@ -1,0 +1,414 @@
+about:
+  date: October 30, 2024 17:15:38
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 11
+  number_tables: 13
+info_toggle_checked: true
+resources:
+  Barn:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: farm_id
+      required: true
+    - name: id
+    description: A barn where multiple pens are located within a farm.
+    info_list: A barn where multiple pens are located within a farm.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - barn_id
+      name: PenList
+      resource: Pen
+    - direction: toone
+      fks:
+      - farm_id
+      name: farm
+      resource: Farm
+    type: Barn
+    user_key: name
+  Cattle:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: tag_number
+      required: true
+    - name: birth_date
+      type: DATETIME
+    description: Represents individual cattle with their specific details.
+    info_list: Represents individual cattle with their specific details.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - cattle_id
+      name: CattlePenList
+      resource: CattlePen
+    - direction: tomany
+      fks:
+      - cattle_id
+      name: HealthCheckList
+      resource: HealthCheck
+    - direction: tomany
+      fks:
+      - cattle_id
+      name: VetVisitList
+      resource: VetVisit
+    type: Cattle
+    user_key: id
+  CattlePen:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: cattle_id
+      required: true
+    - name: pen_id
+      required: true
+    - name: assignment_date
+      type: DATETIME
+    description: Junction table to assign cattle to pens.
+    info_list: Junction table to assign cattle to pens.
+    tab_groups:
+    - direction: toone
+      fks:
+      - cattle_id
+      name: cattle
+      resource: Cattle
+    - direction: toone
+      fks:
+      - pen_id
+      name: pen
+      resource: Pen
+    type: CattlePen
+    user_key: id
+  Employee:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: farm_id
+      required: true
+    - name: role
+    - name: id
+    description: Employees who work on a farm and manage barns and pens.
+    info_list: Employees who work on a farm and manage barns and pens.
+    tab_groups:
+    - direction: toone
+      fks:
+      - farm_id
+      name: farm
+      resource: Farm
+    type: Employee
+    user_key: name
+  Farm:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: location
+    - name: id
+    description: A farm entity which manages multiple barns and workers.
+    info_list: A farm entity which manages multiple barns and workers.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - farm_id
+      name: BarnList
+      resource: Barn
+    - direction: tomany
+      fks:
+      - farm_id
+      name: EmployeeList
+      resource: Employee
+    type: Farm
+    user_key: name
+  FeedingSchedule:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: pen_id
+      required: true
+    - name: feed_type
+      required: true
+    - name: schedule_time
+      required: true
+      type: DATETIME
+    description: Feeding schedule detailing what and when cattle are fed.
+    info_list: Feeding schedule detailing what and when cattle are fed.
+    tab_groups:
+    - direction: toone
+      fks:
+      - pen_id
+      name: pen
+      resource: Pen
+    type: FeedingSchedule
+    user_key: id
+  HealthCheck:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: cattle_id
+      required: true
+    - name: check_date
+      type: DATETIME
+    - name: health_status
+    - name: notes
+    description: Captures health check records for each cattle.
+    info_list: Captures health check records for each cattle.
+    tab_groups:
+    - direction: toone
+      fks:
+      - cattle_id
+      name: cattle
+      resource: Cattle
+    type: HealthCheck
+    user_key: id
+  Pen:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: barn_id
+      required: true
+    - name: id
+    description: A pen used to house cattle within a barn.
+    info_list: A pen used to house cattle within a barn.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - pen_id
+      name: CattlePenList
+      resource: CattlePen
+    - direction: tomany
+      fks:
+      - pen_id
+      name: FeedingScheduleList
+      resource: FeedingSchedule
+    - direction: toone
+      fks:
+      - barn_id
+      name: barn
+      resource: Barn
+    type: Pen
+    user_key: name
+  SPAPage:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+      required: true
+    - name: contact
+    hidden: true
+    tab_groups:
+    - direction: tomany
+      fks:
+      - page_id
+      name: SectionList
+      resource: Section
+    type: SPAPage
+    user_key: name
+  SPASection:
+    attributes:
+    - name: order
+      sort: true
+      type: number
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+    - name: page_id
+    - name: title
+      required: true
+    - name: subtitle
+    - name: label
+    - name: Type
+    - name: paragraph
+      type: textarea
+    - name: content
+      type: textarea
+    - name: id
+    - name: background
+    - name: template
+    - name: style
+      type: json
+    - name: hidden
+      type: boolean
+    hidden: true
+    sort: order
+    tab_groups:
+    - direction: toone
+      fks:
+      - page_id
+      name: page
+      resource: SPAPage
+    type: SPASection
+    user_key: name
+  Supplier:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: contact_info
+    - name: id
+    description: Suppliers providing resources and goods for the farm.
+    info_list: Suppliers providing resources and goods for the farm.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - supplier_id
+      name: SupplyOrderList
+      resource: SupplyOrder
+    type: Supplier
+    user_key: name
+  SupplyItem:
+    attributes:
+    - label: ' item_name*'
+      name: item_name
+      required: true
+      search: true
+      sort: true
+    - name: order_id
+      required: true
+    - name: quantity
+      required: true
+    - name: id
+    description: Details of items supplied in each order.
+    info_list: Details of items supplied in each order.
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: SupplyOrder
+    type: SupplyItem
+    user_key: item_name
+  SupplyOrder:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: supplier_id
+      required: true
+    - name: order_date
+      type: DATETIME
+    - name: delivery_date
+      type: DATETIME
+    description: Orders placed with suppliers for farm needs.
+    info_list: Orders placed with suppliers for farm needs.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - order_id
+      name: SupplyItemList
+      resource: SupplyItem
+    - direction: toone
+      fks:
+      - supplier_id
+      name: supplier
+      resource: Supplier
+    type: SupplyOrder
+    user_key: id
+  VetVisit:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: cattle_id
+      required: true
+    - name: veterinary_id
+      required: true
+    - name: visit_date
+      type: DATETIME
+    - name: treatment
+    description: Veterinary visits and services provided to farm cattle.
+    info_list: Veterinary visits and services provided to farm cattle.
+    tab_groups:
+    - direction: toone
+      fks:
+      - cattle_id
+      name: cattle
+      resource: Cattle
+    - direction: toone
+      fks:
+      - veterinary_id
+      name: veterinary
+      resource: Veterinary
+    type: VetVisit
+    user_key: id
+  Veterinary:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: contact_number
+    - name: id
+    description: Veterinarians associated with the farm for cattle care.
+    info_list: Veterinarians associated with the farm for cattle care.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - veterinary_id
+      name: VetVisitList
+      resource: VetVisit
+    type: Veterinary
+    user_key: name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

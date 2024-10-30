@@ -1,0 +1,123 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Barn: A barn where multiple pens are located within a farm.
+Farm: A farm entity which manages multiple barns and workers.
+Cattle: Represents individual cattle with their specific details.
+CattlePen: Junction table to assign cattle to pens.
+Pen: A pen used to house cattle within a barn.
+Employee: Employees who work on a farm and manage barns and pens.
+FeedingSchedule: Feeding schedule detailing what and when cattle are fed.
+HealthCheck: Captures health check records for each cattle.
+Supplier: Suppliers providing resources and goods for the farm.
+SupplyItem: Details of items supplied in each order.
+SupplyOrder: Orders placed with suppliers for farm needs.
+VetVisit: Veterinary visits and services provided to farm cattle.
+Veterinary: Veterinarians associated with the farm for cattle care.
+'''
+}
+
+Table Barn {
+    id INTEGER [primary key]
+    name VARCHAR 
+    farm_id INTEGER 
+    }
+
+Table Farm {
+    id INTEGER [primary key]
+    name VARCHAR 
+    location VARCHAR 
+    }
+
+Table Cattle {
+    id INTEGER [primary key]
+    tag_number VARCHAR 
+    birth_date DATETIME 
+    }
+
+Table CattlePen {
+    id INTEGER [primary key]
+    cattle_id INTEGER 
+    pen_id INTEGER 
+    assignment_date DATETIME 
+    }
+
+Table Pen {
+    id INTEGER [primary key]
+    name VARCHAR 
+    barn_id INTEGER 
+    }
+
+Table Employee {
+    id INTEGER [primary key]
+    name VARCHAR 
+    role VARCHAR 
+    farm_id INTEGER 
+    }
+
+Table FeedingSchedule {
+    id INTEGER [primary key]
+    pen_id INTEGER 
+    feed_type VARCHAR 
+    schedule_time DATETIME 
+    }
+
+Table HealthCheck {
+    id INTEGER [primary key]
+    cattle_id INTEGER 
+    check_date DATETIME 
+    health_status VARCHAR 
+    notes VARCHAR 
+    }
+
+Table Supplier {
+    id INTEGER [primary key]
+    name VARCHAR 
+    contact_info VARCHAR 
+    }
+
+Table SupplyItem {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    item_name VARCHAR 
+    quantity FLOAT 
+    }
+
+Table SupplyOrder {
+    id INTEGER [primary key]
+    supplier_id INTEGER 
+    order_date DATETIME 
+    delivery_date DATETIME 
+    }
+
+Table VetVisit {
+    id INTEGER [primary key]
+    veterinary_id INTEGER 
+    cattle_id INTEGER 
+    visit_date DATETIME 
+    treatment VARCHAR 
+    }
+
+Table Veterinary {
+    id INTEGER [primary key]
+    name VARCHAR 
+    contact_number VARCHAR 
+    }
+
+
+
+// Relationships
+    Ref: Barn.(farm_id) < Farm.(id)
+    Ref: CattlePen.(cattle_id) < Cattle.(id)
+    Ref: CattlePen.(pen_id) < Pen.(id)
+    Ref: Pen.(barn_id) < Barn.(id)
+    Ref: Employee.(farm_id) < Farm.(id)
+    Ref: FeedingSchedule.(pen_id) < Pen.(id)
+    Ref: HealthCheck.(cattle_id) < Cattle.(id)
+    Ref: SupplyItem.(order_id) < SupplyOrder.(id)
+    Ref: SupplyOrder.(supplier_id) < Supplier.(id)
+    Ref: VetVisit.(cattle_id) < Cattle.(id)
+    Ref: VetVisit.(veterinary_id) < Veterinary.(id)
